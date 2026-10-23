@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+}
+
+group = 'me.countergd'
+version = '0.2.1'
+
+repositories { mavenCentral() }
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.13.1'
+}
+
+// Run with Java 25 on the current Termux/PRoot setup (AWT native library works there),
+// while keeping compiled bytecode/API compatibility at Java 21.
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(25) }
+}
+
+application { mainClass = 'me.countergd.launcher.Main' }
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+tasks.named('run') {
+    systemProperty 'java.awt.headless', 'false'
+}
